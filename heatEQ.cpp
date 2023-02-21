@@ -1,8 +1,10 @@
+/* This file contains several implementations of the heat equation using explicit and implicit methods, some of them 
+work with the standard vectors and others with arrays. The goal was to have a refresher on the basics of scientific computing and 
+help me start to learn how to code in c++ */
+
 #include<vector>
 #include<cmath>
 #include<iostream>
-
-
 
 // set initial distribution
 float init_dist (float x){
@@ -112,15 +114,12 @@ void gaussj (std::vector<std::vector<float>> &A, int l ){
 }; 
 
 
-/*
-Brlow are several classes that may be used to simulate heat transfer in one dimension. Please note that only the 
-fast_heatEQ class accepts a source/forcing function and all simulations use dirichlet boundary conditions
-*/
+/* Below are several classes that may be used to simulate heat transfer in one dimension. Please note that only the 
+fast_heatEQ class accepts a source/forcing function and all simulations use dirichlet boundary conditions */
 
 
-// class that is used to simulate heat transfer.
-// The child classes correspond to the various numerical methods that may 
-// be used to run the simulation
+/* class that is used to simulate heat transfer. The child classes correspond to the various numerical methods that may 
+be used to run the simulation */
 class heateq{
 
     public:
@@ -324,8 +323,7 @@ class crank_nicholson : public heateq{
 };
 
 
-// a much more optimized implimentation of the heat equation
-// uses crank nicholson method for high accuracy without too much work.
+// a much more optimized implimentation of the heat equation, uses crank nicholson method for high accuracy without too much work.
 class fast_heateq{
 
     public:
