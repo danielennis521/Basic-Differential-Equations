@@ -18,14 +18,10 @@ float forcing(float x, float t){
 };
 
 
-/* 
-This section defines several useful linear algebra operations that work on the standard library vectors
-*/
+// This section defines several useful linear algebra operations that work on the standard library vectors
 
-
-// function to swap either two given columns of rows within a matrix.
-// Swap is done in place. If row=True it will swap rows a and b. If row=False
-// then the columns will be swapped
+/* function to swap either two given columns of rows within a matrix. Swap is done in place. If row=True it will swap rows a and b. 
+If row=False then the columns will be swapped */
 void matrix_row_swap(std::vector<std::vector<float>> &A, bool row, int a, int b, int l ){
     float dum;
     if (row){
