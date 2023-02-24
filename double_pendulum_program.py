@@ -115,6 +115,11 @@ def pendulum_rk4(theta1, theta2, omega1, omega2, mode):
         t += dt
 
 
+def on_closing():
+    plt.close()
+    root.destroy()
+    quit()
+
 
 # build the window
 root = Tk()
@@ -162,5 +167,5 @@ outer_mass.grid(row=4, column=2)
 run.grid(row=5, column=1, pady=25)
 
 
-
+root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
