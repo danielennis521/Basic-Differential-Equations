@@ -40,7 +40,7 @@ void matrix_row_swap(std::vector<std::vector<float>> &A, bool row, int a, int b,
 };
 
 
-// take a vector and transform it in place by a given matrix
+// take a vector and transform it by a given matrix
 void vector_map (std::vector<float> &v, std::vector<std::vector<float>> &A, int l ){
     std::vector<float> next;
     float val;
@@ -49,16 +49,12 @@ void vector_map (std::vector<float> &v, std::vector<std::vector<float>> &A, int 
     next.push_back(v[0]);
     for (int i=1; i<l-1; i++){
         val = 0;
-        for(int j=0; j<l; j++){
-            val += A[i][j] * v[i];
-            };
+        for(int j=0; j<l; j++) val += A[i][j] * v[i];
         next.push_back(val);
     };
     next.push_back(v[l-1]);
 
-    // update the distribution
-    for (int i=0; i<l; i++){v[i] = next[i];};
-
+    for (int i=0; i<l; i++) v[i] = next[i];
 };
 
 
@@ -79,22 +75,14 @@ void gaussj (std::vector<std::vector<float>> &A, int l ){
         };
     };
 
-    // loop through and create the inverse matrix
     for (int i=0; i<l; i++){
-
-        // normalize the current row of the matrix
         inv = 1.0/A[i][i];
-        for (int j=0; j<2*l; j++){
-            A[i][j] *= inv;
-        };
-
-        // reduce the other rows of the matrix
-        for (int j=0; j<l; j++){
+        for (int j=0; j<2*l; j++)A[i][j] *= inv;
+        
+        for (int j=0; j<l; j++){        // reduce the other rows of the matrix
             if (j!=i){
                 reduce = A[j][i];
-                for(int k=0; k<2*l; k++){
-                    A[j][k] -= A[i][k]*reduce;
-                };
+                for(int k=0; k<2*l; k++) A[j][k] -= A[i][k]*reduce;
             };
         };
     };
@@ -122,9 +110,7 @@ class heateq{
 
         // prints out the current solution values and time
         void display(){
-            for (float i : heat_dist){
-                std::cout << i << ' ' ;
-            };
+            for (float i : heat_dist) std::cout << i << ' ' ;
             std::cout << '\n';
         };
 
@@ -161,13 +147,10 @@ class heateq{
 
     protected:
         int num_points;
-        float left_endpoint;
-        float right_endpoint;
-        float left_condition;
-        float right_condition;
+        float left_endpoint, right_endpoint;
+        float left_condition, right_condition;
         float time;
-        float dt;
-        float dx;
+        float dt, dx;
 
         // the current distribution on the line
         std::vector<float> heat_dist; 
@@ -188,22 +171,15 @@ class explct : public heateq{
 
         // run a step of the simulation
         void next_step (){
-        
             std::vector<float> next;
 
-            // handle endpoint case
             next.push_back(left_condition);
-            // main loop for intermediate values
             for (int i=1; i<num_points -1; i++ ){
                 next.push_back(heat_dist[i] + dt*(heat_dist[i-1] - 2.0*heat_dist[i] + heat_dist[i+1])/std::pow(dx,2));
             };
-            // handle endpoint case
             next.push_back(right_condition);
 
-            // copy values to the distribution
-            for (int i=0; i<num_points; i++){
-                heat_dist[i] = next[i];
-            };
+            for (int i=0; i<num_points; i++) heat_dist[i] = next[i];
             time++;
         };
 
@@ -376,11 +352,7 @@ class fast_heateq{
             };
 
             // compute the backward substitution
-            for (int i=num_points-2; i>0; i--){
-                heat_dist[i] -= gamma*heat_dist[i+1];
-            };
-
-            // update simulation time
+            for (int i=num_points-2; i>0; i--) heat_dist[i] -= gamma*heat_dist[i+1];
             t+=dt;
         };
 
@@ -388,9 +360,7 @@ class fast_heateq{
         //print out the current heat distribution
         void display(){
             std::cout << "(";
-            for (int i=0; i<num_points; i++){
-                std::cout<<heat_dist[i]<<", ";
-            };
+            for (int i=0; i<num_points; i++) std::cout<<heat_dist[i]<<", ";
             std::cout << "), \n";
         };
 
@@ -403,22 +373,14 @@ class fast_heateq{
 
     private:
     // simulation parameters
-    float dx;
+    float dx, dt;
     int num_points;
-    float left_endpoint;
-    float right_endpoint;
-    float left_condition;
-    float right_condition;
-    float dt;
-    float lmbda;
-    float a;
-    float b;
-    float gamma;
-    float t;
+    float left_endpoint, right_endpoint;
+    float left_condition, right_condition;
+    float a, b, t, gamma, lmbda;
 
     // pointer to the array used for computation
     float* heat_dist;
-    
 };
 
 
