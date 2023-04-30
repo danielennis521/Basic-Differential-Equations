@@ -8,7 +8,7 @@ m1 = 1.0
 m2 = 1.0
 l1 = 1.0
 l2 = 1.0
-g = -9.8  # like a true engineer
+g = -10  # like a true engineer
 frame = (l1 + l2) * 1.125
 
 # stepping information
