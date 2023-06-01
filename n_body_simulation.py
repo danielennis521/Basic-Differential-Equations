@@ -9,7 +9,6 @@ def newtons_law(p1, p2):
     f = ((p2.pos[0] - p1.pos[0])/r, (p2.pos[1] - p1.pos[1])/r)
     F = 6.67e-11 * p1.mass * p2.mass / r**2
     return f[0]*F, f[1]*F
-    
 
 
 class point:        # an object to be simulated 
@@ -29,7 +28,21 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
         self.points = points
         self.time = 0.0
         self.n = len(points)
-        self.forces = np.arange(self.n) 
+        self.forces = np.zeros(self.n, 2) 
+
+        self.gravity()
+        temp = []
+        for i in range(self.n):
+            x = self.points[i].pos[0] + 0.001*self.points[i].vel[0] + 0.5*self.forces[i][0]*0.00001/self.points[i].mass
+            y = self.points[i].pos[1] + 0.001*self.points[i].vel[1] + 0.5*self.forces[i][1]*0.00001/self.points[i].mass
+            vx = self.points[i].vel[0] + 0.001*self.forces[i][0]/self.points[i].mass
+            vy = self.points[i].vel[1] + 0.001*self.forces[i][1]/self.points[i].mass
+
+            p = point([x, y], [vx, vy], self.points[i].mass)
+            temp.append(p)
+        
+        self.prev = self.points
+        self.points = temp
 
 
     def gravity(self):   # determine the gravitational force acting on the particles
@@ -49,8 +62,12 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
 
     def update_system(self):
         self.gravity()
-        
 
+        for i in range(self.n):
+            x = 2.0*self.points[i].pos[0] - self.prev[i].pos[0] + self.forces[i][0]*0.00001/self.points[i].mass
+            y = 2.0*self.points[i].pos[1] - self.prev[i].pos[1] + self.forces[i][1]*0.00001/self.points[i].mass
+            self.prev[i].pos = self.points[i].pos
+            self.points[i].pos = [x, y]
 
     
     
