@@ -7,6 +7,12 @@ dt = 0.01
 G = 6.67e-2
 #G = 6.67e-11
 
+
+def on_closing():
+    plt.close()
+    root.destroy()
+
+
 def newtons_law(p1, p2):
     r = np.sqrt((p2.pos[0] - p1.pos[0])**2 + (p2.pos[1] - p1.pos[1])**2)
     f = ((p2.pos[0] - p1.pos[0])/r, (p2.pos[1] - p1.pos[1])/r)
@@ -72,23 +78,81 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
             self.prev[i].pos = self.points[i].pos
             self.points[i].pos = [x, y]
 
-    
+
+root = Tk()
+
+# define variables set in window
+mass = IntVar()
+mass.set(1)
+xpos = IntVar()
+xpos.set(0)
+ypos = IntVar()
+ypos.set(0)
+xvel = IntVar()
+xvel.set(0)
+yvel = IntVar()
+yvel.set(0)
+
     
 # build the window
-# root = Tk()
-# title = Label(root, text='The N-body problem! (in 2-D)')
-frame = 12
-p1 = point([0.0, 5.0], [20.0, -5.0], 1)
-p2 = point([0.0, 0.0], [0.0, 0.0], 100000)
-sim = nbody_sim([p1, p2])
+title = Label(root, text='The N-body problem! (in 2-D)')
+title.grid(row=0, column=0, columnspan=20)
+
+label1 = ttk.Label(text='Create an object')
+label1.grid(row=1, column=0, columnspan=12, padx=10, pady=10)
+
+label2 = ttk.Label(text='set mass')
+label2.grid(row=2, column=0, columnspan=4, padx=10)
+set_mass = ttk.Spinbox(root, textvariable=mass, from_=1, to=20, increment=0.1)
+set_mass.grid(row=3, column=1, columnspan=2, padx=10)
+
+label3 = ttk.Label(text='set initial position')
+label3.grid(row=2, column=4, columnspan=4, padx=10)
+
+label4 = ttk.Label(text='set the initial velocity')
+label4.grid(row=2, column=8, columnspan=4, padx=10)
+
+label5 = ttk.Label(text='x pos')
+label5.grid(row=3, column=4, padx=10)
+set_xpos = ttk.Spinbox(root, textvariable=xpos, from_=-10, to=10, increment=0.01)
+set_xpos.grid(row=3, column=5, padx=10)
+
+label6 = ttk.Label(text='y pos')
+label6.grid(row=3, column=6, padx=10)
+set_ypos = ttk.Spinbox(root, textvariable=ypos, from_=-10, to=10, increment=0.01)
+set_ypos.grid(row=3, column=7, padx=10)
+
+label7 = ttk.Label(text='x vel')
+label7.grid(row=3, column=8, padx=10)
+set_xvel = ttk.Spinbox(root, textvariable=xvel, from_=-10, to=10, increment=0.01)
+set_xvel.grid(row=3, column=9, padx=10)
+
+label8 = ttk.Label(text='y vel')
+label8.grid(row=3, column=10, padx=10)
+set_yvel = ttk.Spinbox(root, textvariable=yvel, from_=-10, to=10, increment=0.01)
+set_yvel.grid(row=3, column=11, padx=10)
+
+add_point = ttk.Button(root, text='Add the object')
+add_point.grid(row=4, column=6, columnspan=2, pady=20)
+
+run_sim = ttk.Button(root, text='GO GO GO!!!')
+run_sim.grid(row=5, column=6, columnspan=2, pady=20)
+
+# frame = 12
+# p1 = point([0.0, 5.0], [20.0, -5.0], 1)
+# p2 = point([0.0, 0.0], [0.0, 0.0], 100000)
+# sim = nbody_sim([p1, p2])
 
 
-for i in range(1000):
-    plt.xlim(-frame, frame)
-    plt.ylim(-frame, frame)
-    plt.plot(sim.points[0].pos[0], sim.points[0].pos[1], 'ro', color='blue', markersize=4)
-    plt.plot(sim.points[1].pos[0], sim.points[1].pos[1], 'ro', color='red', markersize=10)
-    plt.pause(0.001)
-    plt.cla()
+# for i in range(1000):
+#     plt.xlim(-frame, frame)
+#     plt.ylim(-frame, frame)
+#     plt.plot(sim.points[0].pos[0], sim.points[0].pos[1], 'ro', color='blue', markersize=4)
+#     plt.plot(sim.points[1].pos[0], sim.points[1].pos[1], 'ro', color='red', markersize=10)
+#     plt.pause(0.001)
+#     plt.cla()
 
-    sim.update_system()
+#     sim.update_system()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+root.mainloop()
