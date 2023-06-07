@@ -79,9 +79,31 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
             self.points[i].pos = [x, y]
 
 
+def simulation(sim):
+
+    while True:
+
+        plt.xlim(-frame, frame)
+        plt.ylim(-frame, frame)
+        for p in sim.points:
+            plt.plot(p.pos[0], p.pos[1], 'ro', color='blue', markersize=4)
+        plt.pause(0.001)
+        plt.cla()
+
+        sim.update_system()
+
+
+def reset():
+    global disp, bodys
+    disp=False
+    bodys=[]
+
+
+
 root = Tk()
 
 # define variables set in window
+disp=True
 mass = IntVar()
 mass.set(1)
 xpos = IntVar()
@@ -92,6 +114,8 @@ xvel = IntVar()
 xvel.set(0)
 yvel = IntVar()
 yvel.set(0)
+
+bodys = []
 
     
 # build the window
@@ -132,27 +156,29 @@ label8.grid(row=3, column=10, padx=10)
 set_yvel = ttk.Spinbox(root, textvariable=yvel, from_=-10, to=10, increment=0.01)
 set_yvel.grid(row=3, column=11, padx=10)
 
-add_point = ttk.Button(root, text='Add the object')
+add_point = ttk.Button(root, text='Add the object'
+                        ,command= lambda: bodys.append(point([xpos.get(), ypos.get()], [xvel.get(), yvel.get()], mass.get()))
+                        )
 add_point.grid(row=4, column=6, columnspan=2, pady=20)
 
-run_sim = ttk.Button(root, text='GO GO GO!!!')
+run_sim = ttk.Button(root, text='GO GO GO!!!'
+                     ,command=lambda: simulation(bodys))
 run_sim.grid(row=5, column=6, columnspan=2, pady=20)
 
-# frame = 12
-# p1 = point([0.0, 5.0], [20.0, -5.0], 1)
-# p2 = point([0.0, 0.0], [0.0, 0.0], 100000)
-# sim = nbody_sim([p1, p2])
+end_sim = ttk.Button(root, text='reset'
+                     ,command= lambda: reset())
+end_sim.grid(row=5, column=13, pady=20)
 
 
-# for i in range(1000):
-#     plt.xlim(-frame, frame)
-#     plt.ylim(-frame, frame)
-#     plt.plot(sim.points[0].pos[0], sim.points[0].pos[1], 'ro', color='blue', markersize=4)
-#     plt.plot(sim.points[1].pos[0], sim.points[1].pos[1], 'ro', color='red', markersize=10)
-#     plt.pause(0.001)
-#     plt.cla()
+# define the 
 
-#     sim.update_system()
+
+frame = 12
+p1 = point([0.0, 5.0], [20.0, -5.0], 1)
+p2 = point([0.0, 0.0], [0.0, 0.0], 100000)
+sim = nbody_sim([p1, p2])
+
+
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
