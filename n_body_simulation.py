@@ -8,9 +8,19 @@ G = 6.67e-2
 #G = 6.67e-11
 
 
+def reset():
+    global disp, bodys
+    disp=False
+    bodys=[]
+    plt.close()
+
+
 def on_closing():
+    global disp
+    disp = False
     plt.close()
     root.destroy()
+    quit()
 
 
 def newtons_law(p1, p2):
@@ -80,7 +90,8 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
 
 
 def simulation(sim):
-
+    global disp 
+    disp = True
     while True:
 
         plt.xlim(-frame, frame)
@@ -91,12 +102,8 @@ def simulation(sim):
         plt.cla()
 
         sim.update_system()
-
-
-def reset():
-    global disp, bodys
-    disp=False
-    bodys=[]
+        if disp == False:
+            break
 
 
 
@@ -162,7 +169,7 @@ add_point = ttk.Button(root, text='Add the object'
 add_point.grid(row=4, column=6, columnspan=2, pady=20)
 
 run_sim = ttk.Button(root, text='GO GO GO!!!'
-                     ,command=lambda: simulation(bodys))
+                     ,command=lambda: simulation(nbody_sim(bodys)))
 run_sim.grid(row=5, column=6, columnspan=2, pady=20)
 
 end_sim = ttk.Button(root, text='reset'
