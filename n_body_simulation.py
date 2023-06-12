@@ -68,8 +68,12 @@ class nbody_sim:    # object that takes an array of points and uses them to simu
         for f in self.forces:
             f[0] = 0.0
             f[1] = 0.0
-
-        for i in range(self.n//2):
+            
+        lim = self.n//2
+        if self.n % 2 == 1:
+            lim += 1
+            
+        for i in range(lim):
             for j in range(i+1, self.n):
                 new_f = newtons_law(self.points[i], self.points[j])
                 self.forces[i][0] += new_f[0]
