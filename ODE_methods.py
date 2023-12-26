@@ -1,3 +1,5 @@
+# some simple tools that I find helpful for solving ODE's
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -46,7 +48,7 @@ def trapezoid_secant(f, h, t, y0):
     return yc
 
 
-# finds a multistep scheme using n previous points of the solutions derivative
+# finds an explicit multistep scheme using n previous points of the solutions derivative
 def generate_ex_multistep_scheme(n):
     # NB - the coefficients are returned in the order: a, b1, b2, b3, ... 
     #       corresponding to y_k+1 = a*y_k + b1*y'_k-n + b2*y'_k-n+1 + ...
