@@ -48,12 +48,20 @@ def trapezoid_secant(f, h, t, y0):
     return yc
 
 
-# finds an explicit multistep scheme using n previous points of the solutions derivative
-def generate_ex_multistep_scheme(n):
+# finds an explicit or implicit multistep scheme using n points of the solutions derivative 
+def generate_multistep_scheme(n, type = 'ex'):
     # NB - the coefficients are returned in the order: a, b1, b2, b3, ... 
     #       corresponding to y_k+1 = a*y_k + b1*y'_k-n + b2*y'_k-n+1 + ...
+    #       in the implicit case this means the implicit term will be at the end of the array
 
     # construct the rhs matrix
+    if type == 'im':
+        x = n-2
+        y = n-1
+    elif type == 'ex':
+        x = n-1
+        y = n
+
     a = []
     for i in range(0, n):
         a.append([0, 1])
@@ -64,20 +72,19 @@ def generate_ex_multistep_scheme(n):
         for j in range(2, n+1):
             a[i][j] = a[i][j] * j
 
+
     t = [1]
     for i in range(1, n+1):
-        t.append(t[i-1] * (n-1))
+        t.append(t[i-1] * x)
     a.insert(0,t)
 
     # construct the lhs vector
     v = [1]
     for i in range(1, n+1):
-        v.append(v[i-1] * n)
+        v.append(v[i-1] * y)
+
     
     # solve
-    print(a)
-    print(v)
     a = np.array(a)
     v = np.array(v)
-    print(a.transpose())
     return np.linalg.solve(a.transpose(), v)
